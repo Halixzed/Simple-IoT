@@ -54,18 +54,25 @@ def start_client():
     inputString = "random"
     baseEncryption = hashlib.sha256(inputString.encode())
     digested = baseEncryption.hexdigest()
-    client_cipher = Encryption(digested)
+
+    # diffie hellman key exchange
+    private_client_key, client_public_key = diffieHellman.generate_keypair(p, g)
+    
+    server_public_key = diffieHellman.exchange_public_key(client_socket, client_public_key)
+    shared_key = diffieHellman.generate_shared_key(p, g, private_client_key)
+
+    client_cipher = Encryption(str(shared_key))
 
     root = tk.Tk()
     root.title("Client")
 
-    action_label = tk.Label(root, text="Choose action (REGISTER, LOGIN, COMMAND, QUIT):")
+    action_label = tk.Label(root, text="Choose action (REGISTER, LOGIN, COMMAND):")
     action_label.pack()
 
     action_var = tk.StringVar()
     action_var.set("REGISTER")
 
-    action_option = tk.OptionMenu(root, action_var, "REGISTER", "LOGIN", "COMMAND", "QUIT")
+    action_option = tk.OptionMenu(root, action_var, "REGISTER", "LOGIN", "COMMAND")
     action_option.pack()
 
     username_label = tk.Label(root, text="Enter username:")
@@ -109,9 +116,15 @@ def start_client():
     command_button = tk.Button(root, text="Send Command", command=handle_command_action)
     command_button.pack()
 
+    def close_connection():
+        client_socket.close()
+        root.destroy()
+
+    quit_button = tk.Button(root, text="QUIT", command=close_connection)
+    quit_button.pack()
+
     root.mainloop()
 
-    client_socket.close()
 
 
 if __name__ == '__main__':
