@@ -30,7 +30,7 @@ def start_server():
 
     #initialize temp controller
     tempNode = TempController()
-    inputString = "random"
+    inputString = "Derby"
     baseEncryption = hashlib.sha256(inputString.encode())
     digested = baseEncryption.hexdigest()
     cipher = Encryption(digested)
@@ -43,7 +43,7 @@ def start_server():
         conn_public_key = diffieHellman.exchange_public_key(conn, server_public_key)
         shared_key = diffieHellman.generate_shared_key(p, g, private_server_key)
 
-        cipher = Encryption(str(shared_key))
+        #cipher = Encryption(str(shared_key))
 
         client_thread = threading.Thread(target=handle_client, args=(conn, address, tempNode, cipher))
         client_thread.start()
