@@ -148,7 +148,7 @@ def handle_client(conn, address, tempNode, cipher):
             else:
                 response = "Unknown command"
         else:
-            response = "Please login or register"
+            response = "Please login first"
 
         encrypted_response = cipher.encrypt(response)
         conn.send(encrypted_response.encode())
