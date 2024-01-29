@@ -7,6 +7,7 @@ import time
 import diffieHellman
 from Encryption import Encryption
 from SmartHome import TempController
+import DiskEncryption
 
 
 p = 23
@@ -14,8 +15,12 @@ g = 5
 
 private_server_key, server_public_key = diffieHellman.generate_keypair(p, g)
 
+
 def start_server():
     #dummy server configuration
+
+    
+
     host = 'localhost'
     port = 12345
 
@@ -37,6 +42,8 @@ def start_server():
 
     while True:
         conn, address = server_socket.accept()
+
+        
 
         # diffie hellman key exchange
         conn_public_key = diffieHellman.exchange_public_key(conn, server_public_key)
@@ -69,8 +76,9 @@ def create_user(username, password):
     return True
 
 def login_user(username, password):
+
     hashed_password = hashlib.sha256(password.encode()).hexdigest() #hexidigest() converts to hexidecimal string
-    with open('users.json', 'r') as file:
+    with open('accounts.json', 'r') as file:
         users = json.load(file)
         if username in users and users[username] == hashed_password: #checks if user and password is corrrect 
             return True  # Login successful
@@ -78,7 +86,8 @@ def login_user(username, password):
 
 MAX_LOGIN_ATTEMPTS  = 3
 
-def handle_client(conn, address, tempNode, cipher): 
+def handle_client(conn, address, tempNode, cipher):
+
     print(f"Connection from: {address} Connected.") 
     user_logged_in = False
     login_attempts = 0
