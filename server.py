@@ -3,11 +3,10 @@ import threading
 import hashlib
 import random
 import json
+import time
+import diffieHellman
 from Encryption import Encryption
 from SmartHome import TempController
-import time
-
-import diffieHellman
 
 
 p = 23
